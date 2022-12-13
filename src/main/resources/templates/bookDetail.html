@@ -7,12 +7,19 @@
     <title>Book</title>
 </head>
 <body>
-<div class="container-fluid text-center">
-  <table th:object="${books}">
-    <tr>
-      <td>Name</td>
-      <td th:text="*{name}">Name</td>
-    </tr>
+
+<!--
+  This all could be just Modal - https://getbootstrap.com/docs/5.2/components/modal/
+-->
+
+<div class="container-fluid text-center" th:object="${books}">
+  <h1 class="text-left" th:text="*{name}">Name</h1>
+
+  <div class="d-grid gap-2 col-1 mx-auto" th:each="author: *{authors}">
+    <a href="#" class="btn btn-outline-dark" th:text="${author.name} + ' ' + ${author.surname}">Name Surname</a>
+  </div>
+
+  <table class="table table-responsive table-hover">
     <tr>
       <td>Language</td>
       <td th:text="*{language}">Language</td>
@@ -33,7 +40,18 @@
       <td>Genre</td>
       <td th:text="*{genre}">Genre</td>
     </tr>
+    <tr>
+      <td>Stand</td>
+      <td th:text="*{stand}">Location</td>
+    </tr>
+    <tr>
+      <td>Shelf</td>
+      <td th:text="*{shelf}">Location</td>
+    </tr>
   </table>
+  <div class="d-grid gap-2 col-4 mx-auto">
+    <a href="/Books" class="btn btn-secondary" role="button">Back</a>
+  </div>
 </div>
 </body>
 </html>
