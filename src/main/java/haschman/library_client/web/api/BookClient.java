@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 
 @Component
 public class BookClient {
@@ -31,5 +32,18 @@ public class BookClient {
     public Collection<BookDTO> readAll() {
         var books = allBooksURL.request(MediaType.APPLICATION_JSON_TYPE).get(BookDTO[].class);
         return Arrays.asList(books);
+    }
+
+    public void setCurrentBook(Long id) {
+        singleBookURL = singleURLTemplate.resolveTemplate("id", id);
+    }
+
+    public Optional<BookDTO> readOne() {
+        var response = singleBookURL.request(MediaType.APPLICATION_JSON_TYPE).get();
+        if (response.getStatus() == 200)
+            return Optional.of(response.readEntity(BookDTO.class));
+        if (response.getStatus() == 404)
+            return Optional.empty();
+        throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
     }
 }

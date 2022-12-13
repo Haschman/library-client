@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -27,5 +28,12 @@ public class BooksController {
         }
 
         return "books";
+    }
+
+    @GetMapping("/detail")
+    public String detail(@RequestParam("id") Long id, Model model) {
+        bookService.setCurrentBook(id);
+        model.addAttribute("books", bookService.readOne().orElseThrow());
+        return "bookDetail";
     }
 }

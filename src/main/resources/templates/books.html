@@ -28,20 +28,24 @@
 
     <table class="table">
         <thead>
+            <!--<th>ID</th>-->
             <th>Name</th>
             <th>Author</th>
             <th>Year</th>
             <th>Language</th>
+            <th>Shelf-Stand</th>
             <th>Detail</th>
         </thead>
 
         <tbody>
             <tr th:each="book: ${books}">
+                <!--<td th:text="${book.id}">Id</td>-->
                 <td th:text="${book.name}">Name of book</td>
                 <td th:text="${book.authors[0].name} + ' ' + ${book.authors[0].surname}">Name Surname</td>
                 <td th:text="${book.publication_year}">Year</td>
                 <td th:text="${book.language}">Language</td>
-                <td><a href="#" th:href="@{'/Books/?id=' + ${book.id}}">Detail</a></td>
+                <td th:text="${book.shelf} + '-' + ${book.stand}">Location</td>
+                <td><a href="#" th:href="@{'/Books/detail?id=' + ${book.id}}">Detail</a></td>
             </tr>
         </tbody>
     </table>

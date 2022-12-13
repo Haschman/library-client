@@ -14,11 +14,18 @@ public class BookDTO {
     public Integer publication_year;
     public String category;
     public String genre;
-    //public Pair<Integer, Integer> location;
+    public Integer shelf;
+    public Integer stand;
     public final Set<AuthorDTO> authors = new HashSet<>();
-    public String authorName;
-    public String authorSurname;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -68,13 +75,21 @@ public class BookDTO {
         this.genre = genre;
     }
 
-//    public Pair<Integer, Integer> getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(int stand, int shelf) {
-//        this.location = Pair.of(stand, shelf);
-//    }
+    public Integer getShelf() {
+        return shelf;
+    }
+
+    public void setShelf(Integer shelf) {
+        this.shelf = shelf;
+    }
+
+    public Integer getStand() {
+        return stand;
+    }
+
+    public void setStand(Integer stand) {
+        this.stand = stand;
+    }
 
     public Set<AuthorDTO> getAuthors() {
         return authors;
