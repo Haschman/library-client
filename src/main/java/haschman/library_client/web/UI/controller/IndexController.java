@@ -1,4 +1,4 @@
-package haschman.library_client.web.UI;
+package haschman.library_client.web.UI.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

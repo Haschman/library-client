@@ -16,6 +16,10 @@ public class BookService {
         this.bookClient = bookClient;
     }
 
+    public BookDTO create(BookDTO bookDTO) {
+        return bookClient.create(bookDTO);
+    }
+
     public Collection<BookDTO> readAll() {
         return bookClient.readAll();
     }
