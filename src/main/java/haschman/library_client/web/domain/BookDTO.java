@@ -11,12 +11,12 @@ public class BookDTO {
     public String name;
     public String language;
     public Long ISBN;
-    public Integer publication_year;
+    public Integer publicationYear;
     public String category;
     public String genre;
     public Integer shelf;
     public Integer stand;
-    public final Set<AuthorDTO> authors = new HashSet<>();
+    public Set<Long> authors;
 
 
     public Long getId() {
@@ -51,12 +51,12 @@ public class BookDTO {
         this.ISBN = ISBN;
     }
 
-    public Integer getPublication_year() {
-        return publication_year;
+    public Integer getPublicationYear() {
+        return publicationYear;
     }
 
-    public void setPublication_year(Integer publication_dateS) {
-        this.publication_year = publication_dateS;
+    public void setPublicationYear(Integer publicationYear) {
+        this.publicationYear = publicationYear;
     }
 
     public String getCategory() {
@@ -91,11 +91,11 @@ public class BookDTO {
         this.stand = stand;
     }
 
-    public Set<AuthorDTO> getAuthors() {
+    public Set<Long> getAuthors() {
         return authors;
     }
 
-    public void addAuthor(AuthorDTO author) {
-        authors.add(author);
+    public void setAuthors(Set<Long> authors) {
+        this.authors = authors;
     }
 }

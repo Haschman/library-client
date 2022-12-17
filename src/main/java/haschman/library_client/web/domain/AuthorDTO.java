@@ -1,10 +1,19 @@
 package haschman.library_client.web.domain;
 
 public class AuthorDTO {
+    public Long id;
     public String name;
     public String surname;
     public String nationality;
     public int century;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

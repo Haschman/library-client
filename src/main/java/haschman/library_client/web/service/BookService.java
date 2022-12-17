@@ -2,12 +2,13 @@ package haschman.library_client.web.service;
 
 import haschman.library_client.web.api.BookClient;
 import haschman.library_client.web.domain.BookDTO;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
-@Service
+@Component
 public class BookService {
     private BookClient bookClient;
     private boolean currentBookSet;
