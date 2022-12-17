@@ -23,107 +23,83 @@
 
     <input type="hidden" name="id" id="BookId" th:field="*{id}">
 
-    <div class="mb-3 col-3 mx-auto">
+    <!------ NAME ------>
+    <div class="mb-3 col-4 mx-auto">
       <label class="form-label" for="BookName">Name</label>
-      <input type="text" class="form-control" id="BookName" th:field="*{name}">
-    </div>
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="Language">Language</label>
-      <input type="text" class="form-control" id="Language" th:field="*{language}">
-    </div>
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="ISBN">ISBN</label>
-      <input type="text" class="form-control" id="ISBN" th:field="*{ISBN}">
-    </div>
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="PublicationYear">Publication Year</label>
-      <input type="number" min="0" max="3000" class="form-control" id="PublicationYear" th:field="*{publicationYear}">
-    </div>
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="Category">Category</label>
-      <input type="text" class="form-control" id="Category" th:field="*{category}">
-    </div>
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="Genre">Genre</label>
-      <input type="text" class="form-control" id="Genre" th:field="*{genre}">
+      <input type="text" class="form-control" id="BookName" th:field="*{name}" required>
     </div>
 
-    <!-- Location -->
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="Stand">Stand</label>
-      <input type="number" min="1" max="100" class="form-control" id="Stand" th:field="*{stand}">
-    </div>
-    <div class="mb-3 col-3 mx-auto">
-      <label class="form-label" for="Shelf">Shelf</label>
-      <input type="number" min="1" max="100" class="form-control" id="Shelf" th:field="*{shelf}">
+    <div class="mb-3 col-4 mx-auto">
+      <div class="row">
+        <div class="col">
+          <!------ LANGUAGE ------>
+          <label class="form-label" for="Language">Language</label>
+          <input type="text" class="form-control" id="Language" th:field="*{language}" required>
+        </div>
+        <div class="col">
+          <!------ ISBN ------>
+          <label class="form-label" for="ISBN">ISBN</label>
+          <input type="text" class="form-control" id="ISBN" th:field="*{ISBN}">
+        </div>
+        <div class="col">
+          <!------ PUBLICATION YEAR ------>
+          <label class="form-label" for="PublicationYear">Publication Year</label>
+          <input type="number" min="0" max="3000" class="form-control" id="PublicationYear" th:field="*{publicationYear}" required>
+        </div>
+      </div>
     </div>
 
-    <select class="form-select" multiple id="authors-select" th:field="*{authors}">
-      <option th:each="oneAuthor : ${allAuthors}" th:value="${oneAuthor.id}" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</option>
-    </select>
-    <!--<input type="hidden" id="authors-json" name="authors">-->
+    <div class="mb-3 col-4 mx-auto">
+      <div class="row">
+        <div class="col">
+          <!------ CATEGORY ------>
+          <label class="form-label" for="Category">Category</label>
+          <input type="text" class="form-control" id="Category" th:field="*{category}">
+        </div>
+        <div class="col">
+          <!------ GENRE ------>
+          <label class="form-label" for="Genre">Genre</label>
+          <input type="text" class="form-control" id="Genre" th:field="*{genre}">
+        </div>
+      </div>
+    </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <!------ LOCATION ------>
+    <div class="mb-3 col-4 mx-auto">
+      <div class="row">
+        <div class="col">
+          <label class="form-label" for="Stand">Stand</label>
+          <input type="number" min="1" max="100" class="form-control" id="Stand" th:field="*{stand}" required>
+        </div>
+        <div class="col">
+          <label class="form-label" for="Shelf">Shelf</label>
+          <input type="number" min="1" max="100" class="form-control" id="Shelf" th:field="*{shelf}" required>
+        </div>
+      </div>
+    </div>
+
+    <!------ AUTHORS ------>
+    <div class="mb-3 col-4 mx-auto">
+      <label class="form-label" for="authors-select">Authors</label>
+      <select class="form-select" multiple id="authors-select" th:field="*{authors}">
+        <option th:each="oneAuthor : ${allAuthors}" th:value="${oneAuthor.id}" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</option>
+      </select>
+    </div>
+
+    <div class="container text-center mb-3 col-5 mx-auto">
+      <div class="row justify-content-between">
+        <div class="col">
+          <a class="btn btn-secondary" href="/Books" role="button">All Books</a>
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col">
+          <a class="btn btn-secondary" href="/Books/new" role="button">Refresh</a>
+        </div>
+      </div>
+    </div>
   </form>
-
-  <!--<script>
-    document.getElementById('book-form').addEventListener('submit', function(event) {
-      //event.preventDefault();
-      var authors = [];
-      var authorElements = document.getElementById('authors-select').options;
-      for (var i = 0; i < authorElements.length; i++) {
-        if (authorElements[i].selected) {
-          authors.push(parseInt(authorElements[i].value));
-        }
-      }
-      var id = parseInt(document.getElementById('BookId').value);
-      var name = document.getElementById('BookName').value;
-      var language = document.getElementById('Language').value;
-      var ISBN = parseInt(document.getElementById('ISBN').value);
-      var publicationYear = parseInt(document.getElementById('PublicationYear').value);
-      var category = document.getElementById('Category').value;
-      var genre = document.getElementById('Genre').value;
-      var stand = parseInt(document.getElementById('Stand').value);
-      var shelf = parseInt(document.getElementById('Shelf').value);
-
-      var book = {
-        id: id,
-        name: name,
-        language: language,
-        ISBN: ISBN,
-        publicationYear: publicationYear,
-        category: category,
-        genre: genre,
-        stand: stand,
-        shelf: shelf,
-        authors: authors
-      };
-
-      var body = JSON.stringify(book);
-
-      var request = new XMLHttpRequest();
-      request.setRequestHeader('Content-Type', 'application/json');
-      request.open('POST', '/Books/newSubmit', true);
-
-      request.onload = function (event) {
-        const responseText = event.target.responseText;
-        const status = event.target.status;
-        var message = document.createElement("param");
-        message.innerHTML = responseText + " " + status;
-        document.getElementById("alert-message").appendChild(message);
-      };
-
-      request.onerror = function (event) {
-        const responseText = event.target.responseText;
-        const status = event.target.status;
-        var message = document.createElement("param");
-        message.innerHTML = status + ": " + responseText;
-        document.getElementById("alert-message").appendChild(message);
-      }
-
-      request.send(body);
-    });
-  </script>-->
 
 </div>
 </body>
