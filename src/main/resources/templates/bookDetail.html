@@ -12,11 +12,11 @@
   This all could be just Modal - https://getbootstrap.com/docs/5.2/components/modal/
 -->
 
-<div class="container-fluid text-center" th:object="${books}">
+<div class="container-fluid text-center" th:object="${book}">
   <h1 class="text-left" th:text="*{name}">Name</h1>
 
-  <div class="d-grid gap-2 col-1 mx-auto" th:each="author: *{authors}">
-    <a href="#" class="btn btn-outline-dark" th:text="${author.name} + ' ' + ${author.surname}">Name Surname</a>
+  <div class="d-grid gap-2 col-1 mx-auto" th:each="oneAuthor : ${authors}">
+    <a href="#" class="btn btn-outline-dark" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</a>
   </div>
 
   <table class="table table-responsive table-hover">
@@ -30,7 +30,7 @@
     </tr>
     <tr>
       <td>Publication Year</td>
-      <td th:text="*{publication_year}">Publication year</td>
+      <td th:text="*{publicationYear}">Publication year</td>
     </tr>
     <tr>
       <td>Category</td>
