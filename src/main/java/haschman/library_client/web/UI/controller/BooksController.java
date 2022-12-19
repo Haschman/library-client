@@ -71,6 +71,7 @@ public class BooksController {
         bookService.setCurrentBook(id);
         Optional<BookDTO> currentBook = bookService.readOne();
         model.addAttribute("book", bookService.readOne().orElseThrow());
+        // TODO: Make something if currentBook.isEmpty() - display page that this book does not exists
 
         // Get all authors
         Set<AuthorDTO> authorsOfBook = new HashSet<>();

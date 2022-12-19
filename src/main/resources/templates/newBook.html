@@ -39,12 +39,12 @@
         <div class="col">
           <!------ ISBN ------>
           <label class="form-label" for="ISBN">ISBN</label>
-          <input type="text" class="form-control" id="ISBN" th:field="*{ISBN}">
+          <input type="text" minlength=10 maxlength=20 class="form-control" id="ISBN" th:field="*{ISBN}">
         </div>
         <div class="col">
           <!------ PUBLICATION YEAR ------>
           <label class="form-label" for="PublicationYear">Publication Year</label>
-          <input type="number" min="0" max="3000" class="form-control" id="PublicationYear" th:field="*{publicationYear}" required>
+          <input type="number" class="form-control" id="PublicationYear" th:field="*{publicationYear}" required>
         </div>
       </div>
     </div>
@@ -92,7 +92,12 @@
           <a class="btn btn-secondary" href="/Books" role="button">All Books</a>
         </div>
         <div class="col">
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <div th:if="${success == true}">
+            <button type="submit" class="btn btn-primary" disabled>Submit</button>
+          </div>
+          <div th:unless="${success == true}">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
         </div>
         <div class="col">
           <a class="btn btn-secondary" href="/Books/new" role="button">Refresh</a>

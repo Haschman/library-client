@@ -2,7 +2,6 @@ package haschman.library_client.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -10,7 +9,7 @@ public class BookDTO {
     public Long id;
     public String name;
     public String language;
-    public Long ISBN;
+    public String ISBN;
     public Integer publicationYear;
     public String category;
     public String genre;
@@ -43,11 +42,11 @@ public class BookDTO {
         this.language = language;
     }
 
-    public Long getISBN() {
+    public String getISBN() {
         return ISBN;
     }
 
-    public void setISBN(Long ISBN) {
+    public void setISBN(String ISBN) {
         this.ISBN = ISBN;
     }
 

@@ -15,7 +15,7 @@
 <div class="container-fluid text-center" th:object="${book}">
   <h1 class="text-left" th:text="*{name}">Name</h1>
 
-  <div class="d-grid gap-2 col-1 mx-auto" th:each="oneAuthor : ${authors}">
+  <div class="d-grid gap-2 mb-1 col-1 mx-auto" th:each="oneAuthor : ${authors}">
     <a href="#" class="btn btn-outline-dark" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</a>
   </div>
 
