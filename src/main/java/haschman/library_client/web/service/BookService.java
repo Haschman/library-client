@@ -33,4 +33,9 @@ public class BookService {
     public Optional<BookDTO> readOne() {
         return bookClient.readOne();
     }
+
+    public void deleteOne() {
+        bookClient.deleteOne();
+        currentBookSet = false;
+    }
 }

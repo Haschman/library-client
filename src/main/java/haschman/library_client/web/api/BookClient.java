@@ -46,4 +46,10 @@ public class BookClient {
             return Optional.empty();
         throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
     }
+
+    public void deleteOne() {
+        singleBookURL.request(MediaType.APPLICATION_JSON_TYPE).delete();
+    }
 }
+
+

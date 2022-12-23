@@ -37,7 +37,7 @@ public class BooksController {
             model.addAttribute("authors", authorDTOMap);
         } catch (ClientErrorException e) {
             model.addAttribute("error", true);
-            model.addAttribute("errormsg", e.getMessage());
+            model.addAttribute("errorMsg", e.getMessage());
         }
 
         return "books";
@@ -86,5 +86,13 @@ public class BooksController {
         model.addAttribute("authors", authorsOfBook);
 
         return "bookDetail";
+    }
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam Long id, Model model) {
+        bookService.setCurrentBook(id);
+        bookService.deleteOne();
+        model.addAttribute("books", bookService.readAll());
+        return "books";
     }
 }
