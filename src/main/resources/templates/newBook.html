@@ -82,7 +82,8 @@
     <div class="mb-3 col-4 mx-auto">
       <label class="form-label" for="authors-select">Authors</label>
       <select class="form-select" multiple id="authors-select" th:field="*{authors}">
-        <option th:each="oneAuthor : ${allAuthors}" th:value="${oneAuthor.id}" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</option>
+        <option th:each="oneAuthor : ${allAuthors}" th:value="${oneAuthor.id}" th:if="${oneAuthor.name} != null" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</option>
+        <option th:each="oneAuthor : ${allAuthors}" th:value="${oneAuthor.id}" th:unless="${oneAuthor.name} != null" th:text="${oneAuthor.surname}">Name Surname</option>
       </select>
     </div>
 

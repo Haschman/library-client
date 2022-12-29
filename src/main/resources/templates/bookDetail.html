@@ -24,7 +24,8 @@
   </h1>
 
   <div class="d-grid gap-2 mb-1 col-1 mx-auto" th:each="oneAuthor : ${authors}">
-    <a href="#" class="btn btn-outline-dark" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}">Name Surname</a>
+    <a th:if="${oneAuthor.name == null}" href="#" class="btn btn-outline-dark" th:text="${oneAuthor.surname}">Name Surname</a>
+    <a th:unless="${oneAuthor.name == null}" href="#" class="btn btn-outline-dark" th:text="${oneAuthor.name} + ' ' + ${oneAuthor.surname}"></a>
   </div>
 
   <table class="table table-responsive table-hover">
