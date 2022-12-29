@@ -66,6 +66,32 @@ public class BooksController {
         return "newBook";
     }
 
+    @GetMapping("/edit")
+    public String update(@RequestParam("id") Long id, Model model) {
+        bookService.setCurrentBook(id);
+        model.addAttribute("bookDTO", bookService.readOne().orElseThrow());
+        model.addAttribute("allAuthors", authorService.readAll());
+        return "editBook";
+    }
+
+    @PostMapping("/edit")
+    public String editSubmit(@ModelAttribute BookDTO bookDTO, Model model) {
+        try {
+            bookService.setCurrentBook(bookDTO.getId());
+            bookService.update(bookDTO);
+            model.addAttribute("success", true);
+            model.addAttribute("successMessage", "Book successfully updated");
+            model.addAttribute("bookDTO", bookDTO);
+            model.addAttribute("allAuthors", authorService.readAll());
+        } catch (Exception e) {
+            model.addAttribute("success", false);
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("bookModel", bookDTO);
+            model.addAttribute("allAuthors", authorService.readAll());
+        }
+        return "editBook";
+    }
+
     @GetMapping("/detail")
     public String detail(@RequestParam("id") Long id, Model model) {
         // Get book

@@ -4,12 +4,16 @@ import haschman.library_client.web.domain.BookDTO;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -45,6 +49,19 @@ public class BookClient {
         if (response.getStatus() == 404)
             return Optional.empty();
         throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
+    }
+
+    public void update(BookDTO bookDTO) {
+        var response = singleBookURL.request(MediaType.APPLICATION_JSON_TYPE).put(Entity.entity(bookDTO, MediaType.APPLICATION_JSON_TYPE));
+        if (response.getStatus() == 400) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+
+        if (response.getStatus() == 404) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
+            throw new RuntimeException(responseBody.get("message"));
+        }
     }
 
     public boolean deleteOne() {

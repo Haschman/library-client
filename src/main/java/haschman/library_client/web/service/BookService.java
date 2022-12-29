@@ -34,6 +34,10 @@ public class BookService {
         return bookClient.readOne();
     }
 
+    public void update(BookDTO bookDTO) {
+        bookClient.update(bookDTO);
+    }
+
     public boolean deleteOne() {
         if (bookClient.deleteOne()) {
             currentBookSet = false;
