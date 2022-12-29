@@ -34,8 +34,12 @@ public class BookService {
         return bookClient.readOne();
     }
 
-    public void deleteOne() {
-        bookClient.deleteOne();
+    public boolean deleteOne() {
+        if (bookClient.deleteOne()) {
+            currentBookSet = false;
+            return true;
+        }
         currentBookSet = false;
+        return false;
     }
 }

@@ -6,12 +6,10 @@ import haschman.library_client.web.domain.BookDTO;
 import haschman.library_client.web.service.AuthorService;
 import haschman.library_client.web.service.BookService;
 import jakarta.ws.rs.ClientErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Console;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -35,6 +33,9 @@ public class BooksController {
             model.addAttribute("books", books);
             Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
             model.addAttribute("authors", authorDTOMap);
+            model.addAttribute("deleted", false);
+            model.addAttribute("deleteError", false);
+            model.addAttribute("message", "");
         } catch (ClientErrorException e) {
             model.addAttribute("error", true);
             model.addAttribute("errorMsg", e.getMessage());
@@ -91,8 +92,20 @@ public class BooksController {
     @GetMapping("/delete")
     public String delete(@RequestParam Long id, Model model) {
         bookService.setCurrentBook(id);
-        bookService.deleteOne();
-        model.addAttribute("books", bookService.readAll());
+        if (! bookService.deleteOne()) {
+            model.addAttribute("deleted", false);
+            model.addAttribute("deleteError", true);
+            model.addAttribute("message", "Error occurred when deleting book with ID: " + id);
+        } else {
+            model.addAttribute("deleted", true);
+            model.addAttribute("deleteError", false);
+            model.addAttribute("message", "Successfully deleted book with ID: " + id);
+        }
+
+        Collection<BookDTO> books = bookService.readAll();
+        model.addAttribute("books", books);
+        Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
+        model.addAttribute("authors", authorDTOMap);
         return "books";
     }
 }
