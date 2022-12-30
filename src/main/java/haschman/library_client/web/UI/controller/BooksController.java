@@ -58,10 +58,12 @@ public class BooksController {
             model.addAttribute("success", true);
             model.addAttribute("successMessage", "Book successfully created with id: " + bookDTO.id);
             model.addAttribute("bookModel", bookDTO);
+            model.addAttribute("allAuthors", authorService.readAll());
         } catch (Exception e) {
             model.addAttribute("success", false);
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("bookModel", bookModel);
+            model.addAttribute("allAuthors", authorService.readAll());
         }
         return "newBook";
     }
