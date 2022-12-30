@@ -6,7 +6,6 @@ import haschman.library_client.web.domain.BookDTO;
 import haschman.library_client.web.service.AuthorService;
 import haschman.library_client.web.service.BookService;
 import jakarta.ws.rs.ClientErrorException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -73,9 +72,14 @@ public class BooksController {
     @GetMapping("/edit")
     public String update(@RequestParam("id") Long id, Model model) {
         bookService.setCurrentBook(id);
-        model.addAttribute("bookDTO", bookService.readOne().orElseThrow());
-        // TODO: Make something if currentBook.isEmpty() - display page that this book does not exists
-        model.addAttribute("allAuthors", authorService.readAll());
+        Optional<BookDTO> book = bookService.readOne();
+        if (book.isPresent()) {
+            model.addAttribute("bookDTO", book.get());
+            model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("findingError", false);
+        } else {
+            model.addAttribute("findingError", true);
+        }
         return "editBook";
     }
 

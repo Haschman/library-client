@@ -7,7 +7,21 @@
   <title>New Book</title>
 </head>
 <body>
-<div class="text-center">
+
+<div class="text-center" th:if="${findingError == true}">
+  <div class="alert alert-danger">
+    <p>This book is not in the database</p>
+  </div>
+  <div class="container text-center mb-3 col-5 mx-auto">
+    <div class="row">
+      <div class="col">
+        <a class="btn btn-secondary" href="/Books" role="button">All Books</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-center" th:if="${findingError == false}">
   <H1>Edit Book</H1>
 
   <div class="alert alert-success" th:if="${success == true}">
@@ -16,8 +30,6 @@
   <div class="alert alert-danger" th:if="${success == false}">
     <span th:text="${errorMessage}"></span>
   </div>
-
-  <div class="alert" id="alert-message"></div>
 
   <form method="post" action="#" id="book-form" th:action="@{/Books/edit}" th:object="${bookDTO}">
 
