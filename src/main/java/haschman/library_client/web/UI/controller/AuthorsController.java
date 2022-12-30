@@ -2,25 +2,25 @@ package haschman.library_client.web.UI.controller;
 
 import haschman.library_client.web.UI.model.AuthorModel;
 import haschman.library_client.web.domain.AuthorDTO;
+import haschman.library_client.web.domain.BookDTO;
 import haschman.library_client.web.service.AuthorService;
+import haschman.library_client.web.service.BookService;
 import jakarta.ws.rs.ClientErrorException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/Authors")
 public class AuthorsController {
     private final AuthorService authorService;
+    private final BookService bookService;
 
-    public AuthorsController(AuthorService authorService) {
+    public AuthorsController(AuthorService authorService, BookService bookService) {
         this.authorService = authorService;
+        this.bookService = bookService;
     }
 
     @GetMapping
@@ -57,5 +57,18 @@ public class AuthorsController {
             model.addAttribute("authorModel", authorModel);
         }
         return "newAuthor";
+    }
+
+    @GetMapping("/detail")
+    public String detail(@RequestParam("id") Long id, Model model) {
+        authorService.setCurrentAuthor(id);
+        Optional<AuthorDTO> currentAuthor = authorService.readOne();
+        if (currentAuthor.isPresent()){
+            model.addAttribute("author", currentAuthor.get());
+            model.addAttribute("books", bookService.readBooksByAuthor(id));
+            model.addAttribute("findingError", false);
+        } else
+            model.addAttribute("findingError", true);
+        return "authorDetail";
     }
 }

@@ -41,7 +41,7 @@
       <tr th:each="author: ${authors}">
         <td th:if="${author.name == null}" th:text="${author.surname}">Authors name</td>
         <td th:unless="${author.name == null}"  th:text="${author.name} + ' ' + ${author.surname}">Authors name</td>
-        <td><a href="#">Detail</a></td>
+        <td><a href="#" th:href="@{'Authors/detail?id=' + ${author.id}}">Detail</a></td>
       </tr>
     </tbody>
   </table>
