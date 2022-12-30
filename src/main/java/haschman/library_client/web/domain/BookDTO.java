@@ -2,6 +2,7 @@ package haschman.library_client.web.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.time.Year;
 import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -10,7 +11,7 @@ public class BookDTO {
     public String name;
     public String language;
     public String ISBN;
-    public Integer publicationYear;
+    public Year publicationYear;
     public String category;
     public String genre;
     public Integer shelf;
@@ -50,11 +51,11 @@ public class BookDTO {
         this.ISBN = ISBN;
     }
 
-    public Integer getPublicationYear() {
+    public Year getPublicationYear() {
         return publicationYear;
     }
 
-    public void setPublicationYear(Integer publicationYear) {
+    public void setPublicationYear(Year publicationYear) {
         this.publicationYear = publicationYear;
     }
 
