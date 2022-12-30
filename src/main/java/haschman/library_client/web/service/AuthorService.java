@@ -6,6 +6,7 @@ import org.jvnet.hk2.annotations.Service;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -21,7 +22,7 @@ public class AuthorService {
         return authorClient.create(authorDTO);
     }
 
-    public Collection<AuthorDTO> readAll() {
+    public List<AuthorDTO> readAll() {
         return authorClient.readAll();
     }
 

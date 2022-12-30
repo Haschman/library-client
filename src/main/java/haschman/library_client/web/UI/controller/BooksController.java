@@ -6,6 +6,7 @@ import haschman.library_client.web.domain.BookDTO;
 import haschman.library_client.web.service.AuthorService;
 import haschman.library_client.web.service.BookService;
 import jakarta.ws.rs.ClientErrorException;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,8 @@ public class BooksController {
     @GetMapping
     public String listAll(Model model) {
         try {
-            Collection<BookDTO> books = bookService.readAll();
+            List<BookDTO> books = bookService.readAll();
+            books.sort(Comparator.comparing(BookDTO::getName));
             model.addAttribute("books", books);
             Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
             model.addAttribute("authors", authorDTOMap);
@@ -72,6 +74,7 @@ public class BooksController {
     public String update(@RequestParam("id") Long id, Model model) {
         bookService.setCurrentBook(id);
         model.addAttribute("bookDTO", bookService.readOne().orElseThrow());
+        // TODO: Make something if currentBook.isEmpty() - display page that this book does not exists
         model.addAttribute("allAuthors", authorService.readAll());
         return "editBook";
     }

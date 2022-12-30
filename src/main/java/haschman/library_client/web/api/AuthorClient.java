@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -29,7 +30,7 @@ public class AuthorClient {
                 .post(Entity.entity(authorDTO, MediaType.APPLICATION_JSON_TYPE), AuthorDTO.class);
     }
 
-    public Collection<AuthorDTO> readAll() {
+    public List<AuthorDTO> readAll() {
         var authors = allAuthorsURL.request(MediaType.APPLICATION_JSON_TYPE).get(AuthorDTO[].class);
         return Arrays.asList(authors);
     }

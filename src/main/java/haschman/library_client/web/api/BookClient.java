@@ -12,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class BookClient {
@@ -45,7 +42,7 @@ public class BookClient {
         return createdBook;
     }
 
-    public Collection<BookDTO> readAll() {
+    public List<BookDTO> readAll() {
         var books = allBooksURL.request(MediaType.APPLICATION_JSON_TYPE).get(BookDTO[].class);
         return Arrays.asList(books);
     }
