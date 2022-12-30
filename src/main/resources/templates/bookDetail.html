@@ -8,11 +8,16 @@
 </head>
 <body>
 
-<!--
-  This all could be just Modal - https://getbootstrap.com/docs/5.2/components/modal/
--->
+<div class="text-center" th:if="${findingError == true}">
+  <div class="alert alert-danger">
+    <p>This book is not in the database</p>
+  </div>
+  <div class="d-grid gap-2 col-4 mx-auto">
+    <a href="/Books" class="btn btn-secondary" role="button">Back</a>
+  </div>
+</div>
 
-<div class="container-fluid text-center" th:object="${book}">
+<div class="container-fluid text-center" th:if="${findingError == false}" th:object="${book}">
   <h1 class="text-left">
     <span th:text="*{name}">Name</span>
     <!-- DELETE -->

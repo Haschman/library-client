@@ -92,35 +92,36 @@ public class BooksController {
             model.addAttribute("successMessage", "Book successfully updated");
             model.addAttribute("bookDTO", bookDTO);
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("findingError", false);
         } catch (Exception e) {
             model.addAttribute("success", false);
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("bookModel", bookDTO);
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("findingError", false);
         }
         return "editBook";
     }
 
     @GetMapping("/detail")
     public String detail(@RequestParam("id") Long id, Model model) {
-        // Get book
         bookService.setCurrentBook(id);
         Optional<BookDTO> currentBook = bookService.readOne();
-        model.addAttribute("book", bookService.readOne().orElseThrow());
-        // TODO: Make something if currentBook.isEmpty() - display page that this book does not exists
+        if (currentBook.isPresent()){
+            model.addAttribute("book", currentBook.get());
 
-        // Get all authors
-        Set<AuthorDTO> authorsOfBook = new HashSet<>();
-        if (currentBook.isPresent()) {
+            // Get all authors
+            Set<AuthorDTO> authorsOfBook = new HashSet<>();
             for (Long authorID : currentBook.get().authors) { // Goes through all ID's of authors of current book
                 authorService.setCurrentAuthor(authorID);
                 Optional<AuthorDTO> oneAuthorOfBook = authorService.readOne();
-                if (oneAuthorOfBook.isPresent())
-                    authorsOfBook.add(oneAuthorOfBook.get()); // Adds author to set for model
+                // Adds author to set for model
+                oneAuthorOfBook.ifPresent(authorsOfBook::add);
             }
-        }
-        model.addAttribute("authors", authorsOfBook);
-
+            model.addAttribute("authors", authorsOfBook);
+            model.addAttribute("findingError", false);
+        } else
+            model.addAttribute("findingError", true);
         return "bookDetail";
     }
 
