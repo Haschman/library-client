@@ -1,6 +1,7 @@
 package haschman.library_client.web.api;
 
 import haschman.library_client.web.domain.BookDTO;
+import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
@@ -29,8 +30,19 @@ public class BookClient {
     }
 
     public BookDTO create(BookDTO bookDTO) {
-        return allBooksURL.request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(bookDTO, MediaType.APPLICATION_JSON_TYPE), BookDTO.class);
+        BookDTO createdBook = new BookDTO();
+        try {
+            createdBook = allBooksURL.request(MediaType.APPLICATION_JSON_TYPE)
+                    .post(Entity.entity(bookDTO, MediaType.APPLICATION_JSON_TYPE), BookDTO.class);
+        } catch (ClientErrorException e) {
+            var response = e.getResponse();
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>(){});
+            throw new RuntimeException(responseBody.get("message"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+        return createdBook;
     }
 
     public Collection<BookDTO> readAll() {
@@ -57,8 +69,11 @@ public class BookClient {
             var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
             throw new RuntimeException(responseBody.get("message"));
         }
-
         if (response.getStatus() == 404) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+        if (response.getStatus() == 409) {
             var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
             throw new RuntimeException(responseBody.get("message"));
         }
