@@ -38,6 +38,7 @@ public class BooksController {
             model.addAttribute("deleteError", false);
             model.addAttribute("message", "");
         } catch (ClientErrorException e) {
+            // TODO: This is not used
             model.addAttribute("error", true);
             model.addAttribute("errorMsg", e.getMessage());
         }
