@@ -1,5 +1,6 @@
 package haschman.library_client.web.api;
 
+import haschman.library_client.web.domain.AuthorDTO;
 import haschman.library_client.web.domain.BookDTO;
 import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -19,11 +20,14 @@ public class BookClient {
     private WebTarget allBooksURL;
     private WebTarget singleURLTemplate;
     private WebTarget singleBookURL;
+    private WebTarget allBooksByAuthorURLTemplate;
+    private WebTarget allBooksByAuthorURL;
 
     public BookClient(@Value("${server.url}") String apiURL) {
         var client = ClientBuilder.newClient();
         allBooksURL = client.target(apiURL + "/books");
         singleURLTemplate = allBooksURL.path("/{id}");
+        allBooksByAuthorURLTemplate = allBooksURL.path("/author").queryParam("authorID", "{authorID}");
     }
 
     public BookDTO create(BookDTO bookDTO) {
@@ -78,6 +82,12 @@ public class BookClient {
 
     public boolean deleteOne() {
         return singleBookURL.request(MediaType.APPLICATION_JSON_TYPE).delete().getStatus() == 200;
+    }
+
+    public List<BookDTO> readBooksByAuthor(Long authorID) {
+        allBooksByAuthorURL = allBooksByAuthorURLTemplate.resolveTemplate("authorID", authorID);
+        var response = allBooksByAuthorURL.request(MediaType.APPLICATION_JSON_TYPE).get();
+        return response.readEntity(new GenericType<>(){});
     }
 }
 

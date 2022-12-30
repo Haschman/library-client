@@ -48,4 +48,8 @@ public class BookService {
         currentBookSet = false;
         return false;
     }
+
+    public List<BookDTO> readBooksByAuthor(Long authorID) {
+        return bookClient.readBooksByAuthor(authorID);
+    }
 }
