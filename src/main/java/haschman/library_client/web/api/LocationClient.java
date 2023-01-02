@@ -2,6 +2,7 @@ package haschman.library_client.web.api;
 
 import haschman.library_client.web.domain.LocationDTO;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
@@ -29,8 +30,16 @@ public class LocationClient {
     }
 
     public LocationDTO create(LocationDTO locationDTO) {
-        return allLocationURL.request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(locationDTO, MediaType.APPLICATION_JSON_TYPE), LocationDTO.class);
+        LocationDTO createdLocation = new LocationDTO();
+        try {
+            createdLocation = allLocationURL.request(MediaType.APPLICATION_JSON_TYPE)
+                        .post(Entity.entity(locationDTO, MediaType.APPLICATION_JSON_TYPE), LocationDTO.class);
+        } catch (ClientErrorException e) {
+            var response = e.getResponse();
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>(){});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+        return createdLocation;
     }
 
     public List<LocationDTO> readAll() {
