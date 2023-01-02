@@ -5,6 +5,7 @@ import haschman.library_client.web.domain.AuthorDTO;
 import haschman.library_client.web.domain.BookDTO;
 import haschman.library_client.web.service.AuthorService;
 import haschman.library_client.web.service.BookService;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ClientErrorException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,9 @@ public class AuthorsController {
             List<AuthorDTO> authors = authorService.readAll();
             authors.sort(Comparator.comparing(AuthorDTO::getSurname));
             model.addAttribute("authors", authors);
-            model.addAttribute("error", false);
+            model.addAttribute("deleted", false);
+            model.addAttribute("deleteError", false);
+            model.addAttribute("message", "");
         } catch (ClientErrorException e) {
             // TODO: This is not used
             model.addAttribute("error", true);
@@ -70,5 +73,32 @@ public class AuthorsController {
         } else
             model.addAttribute("findingError", true);
         return "authorDetail";
+    }
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam Long id, Model model) {
+        authorService.setCurrentAuthor(id);
+        try {
+            authorService.deleteOne();
+            model.addAttribute("deleted", true);
+            model.addAttribute("deleteError", false);
+            model.addAttribute("message", "Successfully deleted author with ID: " + id);
+        } catch (BadRequestException e) {
+            model.addAttribute("deleted", false);
+            model.addAttribute("deleteError", true);
+            String message = e.getMessage();
+            List<BookDTO> writtenBooks = bookService.readBooksByAuthor(id);
+            for (BookDTO book : writtenBooks)
+                message = message + "<br>" + book.getName();
+            model.addAttribute("message", message);
+        } catch (Exception e) {
+            model.addAttribute("deleted", false);
+            model.addAttribute("deleteError", true);
+            model.addAttribute("message", e.getMessage());
+        }
+        List<AuthorDTO> authors = authorService.readAll();
+        authors.sort(Comparator.comparing(AuthorDTO::getSurname));
+        model.addAttribute("authors", authors);
+        return "authors";
     }
 }
