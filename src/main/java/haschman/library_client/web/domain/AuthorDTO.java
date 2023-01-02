@@ -5,7 +5,7 @@ public class AuthorDTO {
     public String name;
     public String surname;
     public String nationality;
-    public int century;
+    public Integer century;
 
     public Long getId() {
         return id;
@@ -39,11 +39,11 @@ public class AuthorDTO {
         this.nationality = nationality;
     }
 
-    public int getCentury() {
+    public Integer getCentury() {
         return century;
     }
 
-    public void setCentury(int century) {
+    public void setCentury(Integer century) {
         this.century = century;
     }
 }
