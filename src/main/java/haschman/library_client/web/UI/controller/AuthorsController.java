@@ -116,11 +116,11 @@ public class AuthorsController {
         } catch (BadRequestException e) {
             model.addAttribute("deleted", false);
             model.addAttribute("deleteError", true);
-            String message = e.getMessage();
+            StringBuilder message = new StringBuilder(e.getMessage());
             List<BookDTO> writtenBooks = bookService.readBooksByAuthor(id);
             for (BookDTO book : writtenBooks)
-                message = message + "<br>" + book.getName();
-            model.addAttribute("message", message);
+                message.append("<br>").append(book.getName());
+            model.addAttribute("message", message.toString());
         } catch (Exception e) {
             model.addAttribute("deleted", false);
             model.addAttribute("deleteError", true);
