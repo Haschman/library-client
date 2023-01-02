@@ -2,6 +2,7 @@ package haschman.library_client.web.api;
 
 import haschman.library_client.web.domain.AuthorDTO;
 import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
@@ -26,8 +27,16 @@ public class AuthorClient {
     }
 
     public AuthorDTO create(AuthorDTO authorDTO) {
-        return allAuthorsURL.request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(authorDTO, MediaType.APPLICATION_JSON_TYPE), AuthorDTO.class);
+        AuthorDTO createdAuthor = new AuthorDTO();
+        try {
+            createdAuthor = allAuthorsURL.request(MediaType.APPLICATION_JSON_TYPE)
+                        .post(Entity.entity(authorDTO, MediaType.APPLICATION_JSON_TYPE), AuthorDTO.class);
+        } catch (ClientErrorException e) {
+            var response = e.getResponse();
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>(){});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+        return createdAuthor;
     }
 
     public List<AuthorDTO> readAll() {
