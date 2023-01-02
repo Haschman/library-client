@@ -97,7 +97,7 @@ public class BooksController {
         } catch (Exception e) {
             model.addAttribute("success", false);
             model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("bookModel", bookDTO);
+            model.addAttribute("bookDTO", bookDTO);
             model.addAttribute("allAuthors", authorService.readAll());
             model.addAttribute("findingError", false);
         }

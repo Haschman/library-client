@@ -62,6 +62,36 @@ public class AuthorsController {
         return "newAuthor";
     }
 
+    @GetMapping("/edit")
+    public String update(@RequestParam("id") Long id, Model model) {
+        authorService.setCurrentAuthor(id);
+        Optional<AuthorDTO> author = authorService.readOne();
+        if (author.isPresent()) {
+            model.addAttribute("authorDTO", author.get());
+            model.addAttribute("findingError", false);
+        } else
+            model.addAttribute("findingError", true);
+        return "editAuthor";
+    }
+
+    @PostMapping("/edit")
+    public String editSubmit(@ModelAttribute AuthorDTO authorDTO, Model model) {
+        try {
+            authorService.setCurrentAuthor(authorDTO.getId());
+            authorService.update(authorDTO);
+            model.addAttribute("success", true);
+            model.addAttribute("successMessage", "Author successfully updated");
+            model.addAttribute("authorDTO", authorDTO);
+            model.addAttribute("findingError", false);
+        } catch (Exception e) {
+            model.addAttribute("success", false);
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("authorDTO", authorDTO);
+            model.addAttribute("findingError", false);
+        }
+        return "editAuthor";
+    }
+
     @GetMapping("/detail")
     public String detail(@RequestParam("id") Long id, Model model) {
         authorService.setCurrentAuthor(id);
