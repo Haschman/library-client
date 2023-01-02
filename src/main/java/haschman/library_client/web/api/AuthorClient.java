@@ -1,17 +1,17 @@
 package haschman.library_client.web.api;
 
 import haschman.library_client.web.domain.AuthorDTO;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class AuthorClient {
@@ -46,5 +46,17 @@ public class AuthorClient {
         if (response.getStatus() == 404)
             return Optional.empty();
         throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
+    }
+
+    public void deleteOne() {
+        Response response = singleAuthorURL.request(MediaType.APPLICATION_JSON_TYPE).delete();
+        if (response.getStatus() == 404) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>(){});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+        if (response.getStatus() == 400) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>(){});
+            throw new BadRequestException(responseBody.get("message"));
+        }
     }
 }

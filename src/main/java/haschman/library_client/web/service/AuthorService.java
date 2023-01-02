@@ -2,10 +2,8 @@ package haschman.library_client.web.service;
 
 import haschman.library_client.web.api.AuthorClient;
 import haschman.library_client.web.domain.AuthorDTO;
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +31,10 @@ public class AuthorService {
 
     public Optional<AuthorDTO> readOne() {
         return authorClient.readOne();
+    }
+
+    public void deleteOne() {
+        currentAuthorSet = false;
+        authorClient.deleteOne();
     }
 }
