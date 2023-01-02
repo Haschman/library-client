@@ -9,8 +9,7 @@ import java.util.Optional;
 
 @Component
 public class AuthorService {
-    private AuthorClient authorClient;
-    private boolean currentAuthorSet;
+    private final AuthorClient authorClient;
 
     public AuthorService(AuthorClient authorClient) {
         this.authorClient = authorClient;
@@ -25,7 +24,6 @@ public class AuthorService {
     }
 
     public void setCurrentAuthor(Long id) {
-        currentAuthorSet = true;
         authorClient.setCurrentAuthor(id);
     }
 
@@ -38,7 +36,6 @@ public class AuthorService {
     }
 
     public void deleteOne() {
-        currentAuthorSet = false;
         authorClient.deleteOne();
     }
 }

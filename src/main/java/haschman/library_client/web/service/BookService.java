@@ -3,17 +3,13 @@ package haschman.library_client.web.service;
 import haschman.library_client.web.api.BookClient;
 import haschman.library_client.web.domain.BookDTO;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Vector;
 
 @Component
 public class BookService {
-    private BookClient bookClient;
-    private boolean currentBookSet;
+    private final BookClient bookClient;
 
     public BookService(BookClient bookClient) {
         this.bookClient = bookClient;
@@ -28,7 +24,6 @@ public class BookService {
     }
 
     public void setCurrentBook(Long id) {
-        currentBookSet = true;
         bookClient.setCurrentBook(id);
     }
 
@@ -41,12 +36,7 @@ public class BookService {
     }
 
     public boolean deleteOne() {
-        if (bookClient.deleteOne()) {
-            currentBookSet = false;
-            return true;
-        }
-        currentBookSet = false;
-        return false;
+        return bookClient.deleteOne();
     }
 
     public List<BookDTO> readBooksByAuthor(Long authorID) {
