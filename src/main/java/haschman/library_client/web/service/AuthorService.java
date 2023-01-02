@@ -33,6 +33,10 @@ public class AuthorService {
         return authorClient.readOne();
     }
 
+    public void update(AuthorDTO authorDTO) {
+        authorClient.update(authorDTO);
+    }
+
     public void deleteOne() {
         currentAuthorSet = false;
         authorClient.deleteOne();

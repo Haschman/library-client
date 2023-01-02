@@ -48,6 +48,22 @@ public class AuthorClient {
         throw new RuntimeException(response.getStatusInfo().getReasonPhrase());
     }
 
+    public void update(AuthorDTO authorDTO) {
+        var response = singleAuthorURL.request(MediaType.APPLICATION_JSON_TYPE).put(Entity.entity(authorDTO, MediaType.APPLICATION_JSON_TYPE));
+        if (response.getStatus() == 400) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+        if (response.getStatus() == 404) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+        if (response.getStatus() == 409) {
+            var responseBody = response.readEntity(new GenericType<Map<String, String>>() {});
+            throw new RuntimeException(responseBody.get("message"));
+        }
+    }
+
     public void deleteOne() {
         Response response = singleAuthorURL.request(MediaType.APPLICATION_JSON_TYPE).delete();
         if (response.getStatus() == 404) {
