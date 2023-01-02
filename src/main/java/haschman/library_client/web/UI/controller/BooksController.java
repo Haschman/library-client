@@ -3,9 +3,10 @@ package haschman.library_client.web.UI.controller;
 import haschman.library_client.web.UI.model.BookModel;
 import haschman.library_client.web.domain.AuthorDTO;
 import haschman.library_client.web.domain.BookDTO;
+import haschman.library_client.web.domain.LocationDTO;
 import haschman.library_client.web.service.AuthorService;
 import haschman.library_client.web.service.BookService;
-import jakarta.ws.rs.ClientErrorException;
+import haschman.library_client.web.service.LocationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,29 +21,26 @@ import java.util.stream.Collectors;
 public class BooksController {
     private final BookService bookService;
     private final AuthorService authorService;
+    private final LocationService locationService;
 
-    public BooksController(BookService bookService, AuthorService authorService) {
+    public BooksController(BookService bookService, AuthorService authorService, LocationService locationService) {
         this.bookService = bookService;
         this.authorService = authorService;
+        this.locationService = locationService;
     }
 
     @GetMapping
     public String listAll(Model model) {
-        try {
             List<BookDTO> books = bookService.readAll();
             books.sort(Comparator.comparing(BookDTO::getName));
             model.addAttribute("books", books);
             Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
             model.addAttribute("authors", authorDTOMap);
+            Map<Long, LocationDTO> locationDTOMap = locationService.readAll().stream().collect(Collectors.toMap(LocationDTO::getId, Function.identity()));
+            model.addAttribute("locations", locationDTOMap);
             model.addAttribute("deleted", false);
             model.addAttribute("deleteError", false);
             model.addAttribute("message", "");
-        } catch (ClientErrorException e) {
-            // TODO: This is not used
-            model.addAttribute("error", true);
-            model.addAttribute("errorMsg", e.getMessage());
-        }
-
         return "books";
     }
 
@@ -50,6 +48,7 @@ public class BooksController {
     public String create(Model model) {
         model.addAttribute("bookModel", new BookModel());
         model.addAttribute("allAuthors", authorService.readAll());
+        model.addAttribute("allLocations", locationService.readAll());
         return "newBook";
     }
 
@@ -61,11 +60,13 @@ public class BooksController {
             model.addAttribute("successMessage", "Book successfully created with id: " + bookDTO.id);
             model.addAttribute("bookModel", bookDTO);
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("allLocations", locationService.readAll());
         } catch (Exception e) {
             model.addAttribute("success", false);
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("bookModel", bookModel);
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("allLocations", locationService.readAll());
         }
         return "newBook";
     }
@@ -77,6 +78,7 @@ public class BooksController {
         if (book.isPresent()) {
             model.addAttribute("bookDTO", book.get());
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("allLocations", locationService.readAll());
             model.addAttribute("findingError", false);
         } else {
             model.addAttribute("findingError", true);
@@ -93,12 +95,14 @@ public class BooksController {
             model.addAttribute("successMessage", "Book successfully updated");
             model.addAttribute("bookDTO", bookDTO);
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("allLocations", locationService.readAll());
             model.addAttribute("findingError", false);
         } catch (Exception e) {
             model.addAttribute("success", false);
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("bookDTO", bookDTO);
             model.addAttribute("allAuthors", authorService.readAll());
+            model.addAttribute("allLocations", locationService.readAll());
             model.addAttribute("findingError", false);
         }
         return "editBook";
@@ -120,6 +124,8 @@ public class BooksController {
                 oneAuthorOfBook.ifPresent(authorsOfBook::add);
             }
             model.addAttribute("authors", authorsOfBook);
+            Map<Long, LocationDTO> locationDTOMap = locationService.readAll().stream().collect(Collectors.toMap(LocationDTO::getId, Function.identity()));
+            model.addAttribute("locations", locationDTOMap);
             model.addAttribute("findingError", false);
         } else
             model.addAttribute("findingError", true);
@@ -143,6 +149,8 @@ public class BooksController {
         model.addAttribute("books", books);
         Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
         model.addAttribute("authors", authorDTOMap);
+        Map<Long, LocationDTO> locationDTOMap = locationService.readAll().stream().collect(Collectors.toMap(LocationDTO::getId, Function.identity()));
+        model.addAttribute("locations", locationDTOMap);
         return "books";
     }
 }
