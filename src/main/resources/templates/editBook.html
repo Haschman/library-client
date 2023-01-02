@@ -74,16 +74,10 @@
 
     <!------ LOCATION ------>
     <div class="mb-3 col-4 mx-auto">
-      <div class="row">
-        <div class="col">
-          <label class="form-label" for="Stand">Stand</label>
-          <input type="number" min="1" max="100" class="form-control" id="Stand" th:field="*{stand}" required>
-        </div>
-        <div class="col">
-          <label class="form-label" for="Shelf">Shelf</label>
-          <input type="number" min="1" max="100" class="form-control" id="Shelf" th:field="*{shelf}" required>
-        </div>
-      </div>
+      <label class="form-label" for="location-select">Location</label>
+      <select class="form-select" id="location-select" th:field="*{location}">
+        <option th:each="oneLocation: ${allLocations}" th:value="${oneLocation.id}" th:text="${oneLocation.stand} + '-' + ${oneLocation.shelf}">Location</option>
+      </select>
     </div>
 
     <!------ AUTHORS ------>
