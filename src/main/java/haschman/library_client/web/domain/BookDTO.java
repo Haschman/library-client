@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.Year;
 import java.util.Set;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class BookDTO {
     public Long id;
     public String name;
@@ -14,8 +13,7 @@ public class BookDTO {
     public Year publicationYear;
     public String category;
     public String genre;
-    public Integer shelf;
-    public Integer stand;
+    public Long location;
     public Set<Long> authors;
 
 
@@ -75,20 +73,12 @@ public class BookDTO {
         this.genre = genre;
     }
 
-    public Integer getShelf() {
-        return shelf;
+    public Long getLocation() {
+        return location;
     }
 
-    public void setShelf(Integer shelf) {
-        this.shelf = shelf;
-    }
-
-    public Integer getStand() {
-        return stand;
-    }
-
-    public void setStand(Integer stand) {
-        this.stand = stand;
+    public void setLocation(Long location) {
+        this.location = location;
     }
 
     public Set<Long> getAuthors() {
