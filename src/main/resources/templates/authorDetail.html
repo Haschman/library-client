@@ -33,6 +33,7 @@
         </svg></a>
     </h1>
 
+    <!-- BOOKS -->
     <div class="d-grid gap-2 mb-1 col-1 mx-auto" th:each="oneBook : ${books}">
         <a href="#" th:href="@{'/Books/detail?id=' + ${oneBook.id}}" class="btn btn-outline-dark" th:text="${oneBook.name}">Book Title</a>
     </div>

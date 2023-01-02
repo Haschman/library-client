@@ -60,11 +60,11 @@
     </tr>
     <tr>
       <td>Stand</td>
-      <td th:text="*{stand}">Location</td>
+      <td th:text="${locations.get(book.location).stand}">Stand</td>
     </tr>
     <tr>
       <td>Shelf</td>
-      <td th:text="*{shelf}">Location</td>
+      <td th:text="${locations.get(book.location).shelf}">Shelf</td>
     </tr>
   </table>
   <div class="d-grid gap-2 col-4 mx-auto">

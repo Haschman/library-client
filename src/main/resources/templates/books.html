@@ -20,6 +20,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/Authors">Authors</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Locations">Locations</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -44,7 +47,7 @@
             <th>Author</th>
             <th>Year</th>
             <th>Language</th>
-            <th>Shelf-Stand</th>
+            <th>Stand-Shelf</th>
             <th>Detail</th>
         </thead>
 
@@ -60,7 +63,7 @@
                 </td>
                 <td th:text="${book.publicationYear}">Year</td>
                 <td th:text="${book.language}">Language</td>
-                <td th:text="${book.shelf} + '-' + ${book.stand}">Location</td>
+                <td th:text="${locations.get(book.location).stand} + '-' + ${locations.get(book.location).shelf}">Location</td>
                 <td><a href="#" th:href="@{'/Books/detail?id=' + ${book.id}}">Detail</a></td>
             </tr>
         </tbody>
