@@ -1,6 +1,5 @@
 package haschman.library_client.web.api;
 
-import haschman.library_client.web.domain.AuthorDTO;
 import haschman.library_client.web.domain.BookDTO;
 import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -9,16 +8,14 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
 @Component
 public class BookClient {
     private WebTarget allBooksURL;
-    private WebTarget singleURLTemplate;
+    private WebTarget singleBookTemplate;
     private WebTarget singleBookURL;
     private WebTarget allBooksByAuthorURLTemplate;
     private WebTarget allBooksByAuthorURL;
@@ -26,7 +23,7 @@ public class BookClient {
     public BookClient(@Value("${server.url}") String apiURL) {
         var client = ClientBuilder.newClient();
         allBooksURL = client.target(apiURL + "/books");
-        singleURLTemplate = allBooksURL.path("/{id}");
+        singleBookTemplate = allBooksURL.path("/{id}");
         allBooksByAuthorURLTemplate = allBooksURL.path("/author").queryParam("authorID", "{authorID}");
     }
 
@@ -52,7 +49,7 @@ public class BookClient {
     }
 
     public void setCurrentBook(Long id) {
-        singleBookURL = singleURLTemplate.resolveTemplate("id", id);
+        singleBookURL = singleBookTemplate.resolveTemplate("id", id);
     }
 
     public Optional<BookDTO> readOne() {
