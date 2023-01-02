@@ -19,12 +19,15 @@ public class BookClient {
     private WebTarget singleBookURL;
     private WebTarget allBooksByAuthorURLTemplate;
     private WebTarget allBooksByAuthorURL;
+    private WebTarget allBooksFromLocationURLTemplate;
+    private WebTarget allBooksFromLocationURL;
 
     public BookClient(@Value("${server.url}") String apiURL) {
         var client = ClientBuilder.newClient();
         allBooksURL = client.target(apiURL + "/books");
         singleBookTemplate = allBooksURL.path("/{id}");
         allBooksByAuthorURLTemplate = allBooksURL.path("/author").queryParam("authorID", "{authorID}");
+        allBooksFromLocationURLTemplate = allBooksURL.path("/location").queryParam("locationID", "{locationID}");
     }
 
     public BookDTO create(BookDTO bookDTO) {
@@ -36,9 +39,6 @@ public class BookClient {
             var response = e.getResponse();
             var responseBody = response.readEntity(new GenericType<Map<String, String>>(){});
             throw new RuntimeException(responseBody.get("message"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e.getMessage());
         }
         return createdBook;
     }
@@ -84,6 +84,12 @@ public class BookClient {
     public List<BookDTO> readBooksByAuthor(Long authorID) {
         allBooksByAuthorURL = allBooksByAuthorURLTemplate.resolveTemplate("authorID", authorID);
         var response = allBooksByAuthorURL.request(MediaType.APPLICATION_JSON_TYPE).get();
+        return response.readEntity(new GenericType<>(){});
+    }
+
+    public List<BookDTO> readBooksFromLocation(Long locationID) {
+        allBooksFromLocationURL = allBooksFromLocationURLTemplate.resolveTemplate("locationID", locationID);
+        var response = allBooksFromLocationURL.request(MediaType.APPLICATION_JSON_TYPE).get();
         return response.readEntity(new GenericType<>(){});
     }
 }

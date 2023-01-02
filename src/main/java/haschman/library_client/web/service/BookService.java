@@ -42,4 +42,8 @@ public class BookService {
     public List<BookDTO> readBooksByAuthor(Long authorID) {
         return bookClient.readBooksByAuthor(authorID);
     }
+
+    public List<BookDTO> readBooksFromLocation(Long locationID) {
+        return bookClient.readBooksFromLocation(locationID);
+    }
 }
