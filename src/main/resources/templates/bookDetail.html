@@ -58,18 +58,23 @@
       <td>Genre</td>
       <td th:text="*{genre}">Genre</td>
     </tr>
-    <tr>
-      <td>Stand</td>
-      <td th:text="${locations.get(book.location).stand}">Stand</td>
-    </tr>
-    <tr>
-      <td>Shelf</td>
-      <td th:text="${locations.get(book.location).shelf}">Shelf</td>
+    <tr onclick="locationSelect()" style="cursor: pointer">
+      <td>Location</td>
+      <td th:text="${locations.get(book.location).stand} + '-' + ${locations.get(book.location).shelf}">Location</td>
     </tr>
   </table>
+
   <div class="d-grid gap-2 col-4 mx-auto">
     <a href="/Books" class="btn btn-secondary" role="button">All books</a>
   </div>
 </div>
+
+<script th:inline="javascript">
+  const locationID = [[${book.location}]];
+  function locationSelect() {
+    window.location.href='/Locations/detail?id=' + locationID;
+  }
+</script>
+
 </body>
 </html>
