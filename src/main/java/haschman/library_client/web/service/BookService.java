@@ -4,6 +4,7 @@ import haschman.library_client.web.api.BookClient;
 import haschman.library_client.web.domain.BookDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,19 @@ public class BookService {
 
     public List<BookDTO> readAll() {
         return bookClient.readAll();
+    }
+
+    public List<BookDTO> filterBooks(Character character) {
+        if (! Character.isLetter(character))
+            throw new RuntimeException("Book must be filtered with a letter");
+        character = Character.toUpperCase(character);
+        List<BookDTO> books = readAll();
+        List<BookDTO> filteredBooks = new ArrayList<>();
+        for (BookDTO book : books) {
+            if (Character.toUpperCase(book.name.charAt(0)) == character)
+                filteredBooks.add(book);
+        }
+        return filteredBooks;
     }
 
     public void setCurrentBook(Long id) {

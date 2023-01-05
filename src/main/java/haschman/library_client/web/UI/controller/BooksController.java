@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,6 +32,36 @@ public class BooksController {
 
     @GetMapping
     public String listAll(Model model) {
+        List<BookDTO> books = bookService.readAll();
+        books.sort(Comparator.comparing(BookDTO::getName));
+        model.addAttribute("books", books);
+        Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
+        model.addAttribute("authors", authorDTOMap);
+        Map<Long, LocationDTO> locationDTOMap = locationService.readAll().stream().collect(Collectors.toMap(LocationDTO::getId, Function.identity()));
+        model.addAttribute("locations", locationDTOMap);
+        model.addAttribute("deleted", false);
+        model.addAttribute("deleteError", false);
+        model.addAttribute("message", "");
+        model.addAttribute("filterError", false);
+        return "books";
+    }
+
+    @GetMapping("/start-with")
+    public String listFiltered(@RequestParam("character") Character character, Model model) {
+        try {
+            List<BookDTO> books = bookService.filterBooks(character);
+            books.sort(Comparator.comparing(BookDTO::getName));
+            model.addAttribute("books", books);
+            Map<Long, AuthorDTO> authorDTOMap = authorService.readAll().stream().collect(Collectors.toMap(AuthorDTO::getId, Function.identity()));
+            model.addAttribute("authors", authorDTOMap);
+            Map<Long, LocationDTO> locationDTOMap = locationService.readAll().stream().collect(Collectors.toMap(LocationDTO::getId, Function.identity()));
+            model.addAttribute("locations", locationDTOMap);
+            model.addAttribute("deleted", false);
+            model.addAttribute("deleteError", false);
+            model.addAttribute("filterError", false);
+            model.addAttribute("message", "");
+            return "books";
+        } catch (RuntimeException e) {
             List<BookDTO> books = bookService.readAll();
             books.sort(Comparator.comparing(BookDTO::getName));
             model.addAttribute("books", books);
@@ -40,8 +71,10 @@ public class BooksController {
             model.addAttribute("locations", locationDTOMap);
             model.addAttribute("deleted", false);
             model.addAttribute("deleteError", false);
-            model.addAttribute("message", "");
-        return "books";
+            model.addAttribute("filterError", true);
+            model.addAttribute("message", e.getMessage());
+            return "books";
+        }
     }
 
     @GetMapping("/new")
@@ -151,6 +184,7 @@ public class BooksController {
         model.addAttribute("authors", authorDTOMap);
         Map<Long, LocationDTO> locationDTOMap = locationService.readAll().stream().collect(Collectors.toMap(LocationDTO::getId, Function.identity()));
         model.addAttribute("locations", locationDTOMap);
+        model.addAttribute("filterError", false);
         return "books";
     }
 }

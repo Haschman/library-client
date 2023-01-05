@@ -41,6 +41,10 @@
         <span th:text="${message}"></span>
     </div>
 
+    <div class="alert alert-success" th:if="${filterError == true}">
+        <span th:text="${message}"></span>
+    </div>
+
     <table class="table table-responsive table-striped table-hover">
         <thead>
             <th>Name</th>
